@@ -1,7 +1,7 @@
 // =====================
 // 源注册表 (Source Registry)
 // =====================
-// 集中管理所有弹幕源的元数据与实例化，消除散落在 dandan-api.js / worker.test.js 中的
+// 集中管理所有弹幕源的元数据与实例化，消除散落在 dandan-api.js / danmu_api/tests/ 中的
 // import + new + if/else 分发三段重复代码。
 //
 // 新增一个源只需：
@@ -37,6 +37,7 @@ import AiyifanSource from './aiyifan.js';
 import HongguoSource from './hongguo.js';
 import AnimekoSource from './animeko.js';
 import OtherSource from './other.js';
+import LocalSource from './local.js';
 
 // 源注册表：每条记录描述一个源的调度身份与实例化方式。
 // 字段说明：
@@ -69,7 +70,8 @@ const SOURCE_REGISTRY = [
   { key: 'bahamut',   logName: '',        factory: () => new BahamutSource(), deps: [] },
   { key: 'dandan',    logName: '',        factory: () => new DandanSource(), deps: [] },
   { key: 'custom',    logName: '',        factory: () => new CustomSource(), deps: [],
-    handleAdapter: (instance, searchResult, queryTitle, isolatedAnimes) => instance.handleAnimes(searchResult, queryTitle, isolatedAnimes) },
+    handleAdapter: (instance, searchResult, queryTitle, isolatedAnimes, isolatedDetailStore) =>
+      instance.handleAnimes(searchResult, queryTitle, isolatedAnimes, isolatedDetailStore) },
   { key: 'tencent',   logName: '',        factory: () => new TencentSource(), deps: [] },
   { key: 'iqiyi',     logName: '',        factory: () => new IqiyiSource(), deps: [] },
   { key: 'imgo',      logName: 'mango',   factory: () => new MangoSource(), deps: [] },
@@ -84,6 +86,7 @@ const SOURCE_REGISTRY = [
   { key: 'hongguo',   logName: '',        factory: () => new HongguoSource(), deps: [] },
   { key: 'animeko',   logName: '',        factory: () => new AnimekoSource(), deps: [] },
   { key: 'other',     logName: '',        factory: () => new OtherSource(), deps: [] },
+  { key: 'local',     logName: 'local',   factory: () => new LocalSource(), deps: [] },
 ];
 
 // ---- 实例缓存（按 key 索引）----
